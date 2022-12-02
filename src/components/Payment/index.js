@@ -29,7 +29,7 @@ function Payment({network,amount,currency}){
     
             };
             axios.post(
-                "/new_payment",
+                process.env.NODE_ENV==="production" ?  `${process.env.API_URL}/new_payment`: `/new_payment`,
                 {network:network,currency:currency},
                 config
             ).then(
@@ -52,7 +52,7 @@ function Payment({network,amount,currency}){
         };
         const interval = setInterval(() => {
             axios.get(
-                "/payment_state",
+                process.env.NODE_ENV==="production" ?  `${process.env.API_URL}/payment_state`: `/payment_state`,
                 config
             ).then(
                 (response)=>{
