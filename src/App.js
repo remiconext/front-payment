@@ -40,7 +40,7 @@ function App() {
   
   
       axios.get(
-          "/available_currency"
+        process.env.NODE_ENV==="production" ?  `${process.env.REACT_APP_API_URL}/available_currency` : "http://localhost:3001/available_currency"
       ).then(
           (response)=>{
               setSelectedCurrency(Object.keys(response.data)[0])
