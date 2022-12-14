@@ -56,6 +56,13 @@
             text-align: center;
             flex-grow: 1;
         }
+
+        .logo{
+            &>img{
+                width:70px;
+            }
+            
+        }
     }
 
 }

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { useState,useEffect, useRef} from 'react';
 
-function Card({amount,currency,order,children,changeSelectedCurrency,network,listCurrencies}){
+function Card({logo,amount,currency,order,children,changeSelectedCurrency,network,listCurrencies}){
     const [showCurrencySelector, setShowCurrencySelector] = useState(false)
     const ref = useRef(null);
 
@@ -41,6 +41,7 @@ function Card({amount,currency,order,children,changeSelectedCurrency,network,lis
                     </div>
                 </div>
                 <div className={styles.order + " order_custom"}>Order #{order}</div>
+                {logo !== undefined && <div className={styles.logo + " logo_custom"}><img src={logo} alt="logo"/></div>}
             </div>
 
             <div className={styles.body + " body_custom"}>

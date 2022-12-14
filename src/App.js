@@ -13,6 +13,7 @@ function App() {
   const [order, setOrder] = useState()
   const [price, setPrice] = useState()
   const [cssFile, setCssFile] = useState()
+  const [logo, setLogo] = useState()
   const [queryParams, setQueryParams] = useState()
 
   const [selectedCurrency,setSelectedCurrency] = useState()
@@ -26,7 +27,6 @@ function App() {
 
   useEffect(()=>{
     if(queryParams !== undefined){
-      console.log("ici")
       let decoded = jwt.decode(queryParams.token)
       
       const uuidTable = decoded.callback.split("/")
@@ -34,6 +34,7 @@ function App() {
   
       setPrice(decoded.amount)
   
+      setLogo(decoded.logo)
       setOrder(uuid)
   
       setCssFile(decoded.css)
@@ -62,7 +63,7 @@ function App() {
   return (
     <div className="App">
       <link rel="stylesheet" type="text/css" href={cssFile} />
-      <Card currency={selectedCurrency} listCurrencies={listCurrencies} network={network} changeSelectedCurrency={setSelectedCurrency} amount={price} order={order}>
+      <Card logo={logo} currency={selectedCurrency} listCurrencies={listCurrencies} network={network} changeSelectedCurrency={setSelectedCurrency} amount={price} order={order}>
         {
           network === undefined?
             <NetworkSelection listCurrencies={listCurrencies} availableNetworks={availableNetworks} selectedCurrency={selectedCurrency} onClick={setNetwork}/>

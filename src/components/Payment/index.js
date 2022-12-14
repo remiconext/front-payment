@@ -45,7 +45,8 @@ function Payment({network,amount,currency}){
 
     useEffect(()=>{
         const token = queryString.parse(window.location.search).token
-        const callback=jwt.decode(token).callback
+        const url=new URL(jwt.decode(token).callback)
+        const callback=url.protocol+url.host
 
         const config = {
             headers: { Authorization: `Bearer ${token}` }
