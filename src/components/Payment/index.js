@@ -8,7 +8,7 @@ import axios from 'axios';
 import queryString from "query-string";
 import jwt from "jsonwebtoken";
 
-function Payment({network,amount,currency}){
+function Payment({network,amount,currency,removeSelectedCurrency}){
     const [copied,setCopied] = useState(false)
     const [address,setAddress] = useState()
     const [error,setError] = useState(undefined)
@@ -89,6 +89,7 @@ function Payment({network,amount,currency}){
                     style={{left:"50%",position: "relative",transform: "translateX(-50%)"}}
                 />
                 <p className={styles.message}>Once the payment is done, you will be automaticaly redirected. It can take up to 15 minutes</p>
+                <div className={styles.backButton + " back_btn"} onClick={removeSelectedCurrency}>Back</div>
             </> : (
                 <div>{error}</div>
             )}

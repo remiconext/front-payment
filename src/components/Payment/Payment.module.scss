@@ -14,9 +14,11 @@
         display: flex;
         justify-content: center;
         margin:10px 0;
+        align-items: center;
         span{
             flex-grow: 1;
             text-align: center;
+            word-break: break-all;
         }
         svg{
             cursor: pointer;
@@ -31,5 +33,21 @@
     }
     .message{
         text-align: center;
+    }
+    .backButton{
+        position: absolute;
+        bottom: 5%;
+        left: 50%;
+        transform: translateX(-50%);
+        cursor: pointer;
+    }
+}
+@media screen and (max-width:555px){
+    .body{
+        .address{
+            svg{
+                height: 1.5em;
+            }
+        }
     }
 }

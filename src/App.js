@@ -1,6 +1,7 @@
 import './App.css';
 import Card from './components/Card'
 import NetworkSelection from './components/NetworkSelection'
+import CurrencySelection from './components/CurrencySelection'
 import Payment from './components/Payment'
 import {useState,useEffect} from 'react'
 import jwt from "jsonwebtoken"
@@ -44,7 +45,7 @@ function App() {
         process.env.NODE_ENV==="production" ?  `${process.env.REACT_APP_API_URL}/available_currency` : "http://localhost:3001/available_currency"
       ).then(
           (response)=>{
-              setSelectedCurrency(Object.keys(response.data)[0])
+              /*setSelectedCurrency(Object.keys(response.data)[0])*/
               setListCurrencies(response.data)
               let availableNetworksArray=[]
               for(const currency in response.data){
@@ -63,12 +64,15 @@ function App() {
   return (
     <div className="App">
       <link rel="stylesheet" type="text/css" href={cssFile} />
-      <Card logo={logo} currency={selectedCurrency} listCurrencies={listCurrencies} network={network} changeSelectedCurrency={setSelectedCurrency} amount={price} order={order}>
+      <Card logo={logo} network={network} amount={price} order={order}>
         {
           network === undefined?
-            <NetworkSelection listCurrencies={listCurrencies} availableNetworks={availableNetworks} selectedCurrency={selectedCurrency} onClick={setNetwork}/>
+            <NetworkSelection  availableNetworks={availableNetworks} onClick={setNetwork}/>
           :
-            <Payment currency={selectedCurrency} amount={price} network={network} />
+            selectedCurrency === undefined?
+              <CurrencySelection selectedNetwork={network} listCurrencies={listCurrencies} onClick={setSelectedCurrency} removeSelectedNetwork={()=>setNetwork(undefined)}/>
+            :
+              <Payment currency={selectedCurrency} amount={price} network={network} removeSelectedCurrency={()=>setSelectedCurrency(undefined)}/>
         }
       </Card>
     </div>
