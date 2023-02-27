@@ -12,6 +12,7 @@ function Payment({network,amount,currency,removeSelectedCurrency}){
     const [copied,setCopied] = useState(false)
     const [address,setAddress] = useState()
     const [error,setError] = useState(undefined)
+    const [expiredTimeout,setExpiredTimeout] = useState(false)
 
     useEffect(()=>{
         if(copied){
@@ -20,6 +21,7 @@ function Payment({network,amount,currency,removeSelectedCurrency}){
     },[copied]);
 
     useEffect(()=>{
+        let timeoutId
         if(network !== undefined && currency !== undefined){
             const token = queryString.parse(window.location.search).token
 
@@ -35,11 +37,18 @@ function Payment({network,amount,currency,removeSelectedCurrency}){
             ).then(
                 (response)=>{
                     setAddress(response.data.address)
+                    if(response.data.invalidInMs!==undefined){
+                        let remainingTime = Math.floor(response.data.invalidInMs)
+                        timeoutId = setTimeout(()=>{
+                            setExpiredTimeout(true)
+                        },remainingTime)
+                    }
                 }
             ).catch((e)=>{
                 setError(e.response.data)
             })
         }
+        return () => clearInterval(timeoutId);
 
     },[network,currency]);
 
@@ -71,24 +80,31 @@ function Payment({network,amount,currency,removeSelectedCurrency}){
         <div className={styles.body}>
             {error===undefined ? 
             <>
-                <div >
-                    <div className={styles.label}>To pay, send {amount} {currency} to :</div>
-                    <div className={styles.address}>
-                        <span>{address}</span>
-                        <CopyToClipboard 
-                            text={address} 
-                            onCopy={() => setCopied(true)}
-                        >   
-                            <FontAwesomeIcon icon={faClone} />
-                        </CopyToClipboard>
+                {!expiredTimeout ? <>
+                    <div >
+                        <div className={styles.label}>To pay, send {amount} {currency} to :</div>
+                        <div className={styles.address}>
+                            <span>{address}</span>
+                            <CopyToClipboard 
+                                text={address} 
+                                onCopy={() => setCopied(true)}
+                            >   
+                                <FontAwesomeIcon icon={faClone} />
+                            </CopyToClipboard>
+                        </div>
+                        {copied && <p className={styles.copied}>Copied</p>}
                     </div>
-                    {copied && <p className={styles.copied}>Copied</p>}
+                    <QRCode 
+                        value={`${network}:${address}`}
+                        style={{left:"50%",position: "relative",transform: "translateX(-50%)"}}
+                    />
+                    <p className={styles.message}>Once the payment is done, you will be automaticaly redirected. It can take up to 15 minutes</p>
+                    
+                </>:
+                <div className={styles.expired}>
+                    Payment expired
                 </div>
-                <QRCode 
-                    value={`${network}:${address}`}
-                    style={{left:"50%",position: "relative",transform: "translateX(-50%)"}}
-                />
-                <p className={styles.message}>Once the payment is done, you will be automaticaly redirected. It can take up to 15 minutes</p>
+                }
                 <div className={styles.backButton + " back_btn"} onClick={removeSelectedCurrency}>Back</div>
             </> : (
                 <div>{error}</div>
