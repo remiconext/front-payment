@@ -37,13 +37,18 @@ function App() {
   
       setLogo(decoded.logo)
       setOrder(uuid)
-  
+
       setCssFile(decoded.css)
   
   
       axios.get(
-        process.env.NODE_ENV==="production" ?  `${process.env.REACT_APP_API_URL}/available_currency` : "http://localhost:3001/available_currency"
-      ).then(
+        process.env.NODE_ENV==="production" ?  `${process.env.REACT_APP_API_URL}/available_currency` : "http://localhost:3001/available_currency",
+        {
+          params: {
+            url: window.location.href 
+          }
+        }
+        ).then(
           (response)=>{
               /*setSelectedCurrency(Object.keys(response.data)[0])*/
               setListCurrencies(response.data)
