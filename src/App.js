@@ -30,7 +30,7 @@ function App() {
     if(queryParams !== undefined){
       let decoded = jwt.decode(queryParams.token)
       
-      const uuidTable = decoded.callback.split("/")
+      const uuidTable = decoded.callback.split("=")
       const uuid = uuidTable[uuidTable.length - 1]
   
       setPrice(decoded.amount)
